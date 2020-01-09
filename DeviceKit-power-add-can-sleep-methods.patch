@@ -1,0 +1,252 @@
+diff -urNp DeviceKit-power-014.old/devkit-power-gobject/dkp-client.c DeviceKit-power-014/devkit-power-gobject/dkp-client.c
+--- DeviceKit-power-014.old/devkit-power-gobject/dkp-client.c	2011-07-22 13:40:57.416654756 +0100
++++ DeviceKit-power-014/devkit-power-gobject/dkp-client.c	2011-07-22 13:41:12.210469808 +0100
+@@ -234,6 +234,7 @@ static void
+ dkp_client_ensure_properties (DkpClient *client)
+ {
+ 	gboolean ret;
++	gboolean allowed = FALSE;
+ 	GError *error;
+ 	GHashTable *props;
+ 	GValue *value;
+@@ -269,7 +270,21 @@ dkp_client_ensure_properties (DkpClient 
+ 		g_warning ("No 'CanSuspend' property");
+ 		goto out;
+ 	}
+-	ret = g_value_get_boolean (value);
++
++	ret = dbus_g_proxy_call (client->priv->proxy,
++				 "SuspendAllowed",
++				 &error,
++				 G_TYPE_INVALID,
++				 G_TYPE_BOOLEAN, &allowed,
++				 G_TYPE_INVALID);
++	if (!ret) {
++		g_warning ("Error invoking SuspendAllowed(): %s",
++			   error->message);
++		g_error_free (error);
++		goto out;
++	}
++
++	ret = g_value_get_boolean (value) && allowed;
+ 	if (ret != client->priv->can_suspend) {
+ 		client->priv->can_suspend = ret;
+ 		g_object_notify (G_OBJECT(client), "can-suspend");
+@@ -280,7 +295,20 @@ dkp_client_ensure_properties (DkpClient 
+ 		g_warning ("No 'CanHibernate' property");
+ 		goto out;
+ 	}
+-	ret = g_value_get_boolean (value);
++
++	ret = dbus_g_proxy_call (client->priv->proxy, "HibernateAllowed",
++				 &error,
++				 G_TYPE_INVALID,
++				 G_TYPE_BOOLEAN, &allowed,
++				 G_TYPE_INVALID);
++	if (!ret) {
++		g_warning ("Error invoking HibernateAllowed(): %s",
++			   error->message);
++		g_error_free (error);
++		goto out;
++	}
++
++	ret = g_value_get_boolean (value) && allowed;
+ 	if (ret != client->priv->can_hibernate) {
+ 		client->priv->can_hibernate = ret;
+ 		g_object_notify (G_OBJECT(client), "can-hibernate");
+diff -urNp DeviceKit-power-014.old/src/dkp-daemon.c DeviceKit-power-014/src/dkp-daemon.c
+--- DeviceKit-power-014.old/src/dkp-daemon.c	2011-07-22 13:40:57.146658131 +0100
++++ DeviceKit-power-014/src/dkp-daemon.c	2011-07-22 13:41:12.211469796 +0100
+@@ -540,6 +540,32 @@ out:
+ }
+ 
+ /**
++ * dkp_daemon_suspend_allowed:
++ **/
++gboolean
++dkp_daemon_suspend_allowed (DkpDaemon *daemon, DBusGMethodInvocation *context)
++{
++	gboolean ret;
++	GError *error;
++	PolkitSubject *subject = NULL;
++
++	subject = dkp_polkit_get_subject (daemon->priv->polkit, context);
++	if (subject == NULL)
++		goto out;
++
++	ret = dkp_polkit_is_allowed (daemon->priv->polkit,
++				     subject,
++				     "org.freedesktop.devicekit.power.suspend",
++				     context);
++	dbus_g_method_return (context, ret);
++
++out:
++	if (subject != NULL)
++		g_object_unref (subject);
++	return TRUE;
++}
++
++/**
+  * dkp_daemon_hibernate:
+  **/
+ gboolean
+@@ -608,6 +634,32 @@ out:
+ }
+ 
+ /**
++ * dkp_daemon_hibernate_allowed:
++ **/
++gboolean
++dkp_daemon_hibernate_allowed (DkpDaemon *daemon, DBusGMethodInvocation *context)
++{
++	gboolean ret;
++	GError *error;
++	PolkitSubject *subject = NULL;
++
++	subject = dkp_polkit_get_subject (daemon->priv->polkit, context);
++	if (subject == NULL)
++		goto out;
++
++	ret = dkp_polkit_is_allowed (daemon->priv->polkit,
++				     subject,
++				     "org.freedesktop.devicekit.power.hibernate",
++				     context);
++	dbus_g_method_return (context, ret);
++
++out:
++	if (subject != NULL)
++		g_object_unref (subject);
++	return TRUE;
++}
++
++/**
+  * dkp_daemon_register_power_daemon:
+  **/
+ static gboolean
+diff -urNp DeviceKit-power-014.old/src/dkp-daemon.h DeviceKit-power-014/src/dkp-daemon.h
+--- DeviceKit-power-014.old/src/dkp-daemon.h	2011-07-22 13:40:57.169657843 +0100
++++ DeviceKit-power-014/src/dkp-daemon.h	2011-07-22 13:41:07.819524702 +0100
+@@ -83,8 +83,12 @@ gboolean	 dkp_daemon_get_low_battery	(Dk
+ 						 DBusGMethodInvocation	*context);
+ gboolean	 dkp_daemon_suspend		(DkpDaemon		*daemon,
+ 						 DBusGMethodInvocation	*context);
++gboolean	 dkp_daemon_suspend_allowed	(DkpDaemon		*daemon,
++						 DBusGMethodInvocation	*context);
+ gboolean	 dkp_daemon_hibernate		(DkpDaemon		*daemon,
+ 						 DBusGMethodInvocation	*context);
++gboolean	 dkp_daemon_hibernate_allowed	(DkpDaemon		*daemon,
++						 DBusGMethodInvocation	*context);
+ gboolean	 dkp_daemon_can_suspend		(DkpDaemon		*daemon,
+ 						 gboolean		 interactive,
+ 						 DBusGMethodInvocation	*context);
+diff -urNp DeviceKit-power-014.old/src/dkp-polkit.c DeviceKit-power-014/src/dkp-polkit.c
+--- DeviceKit-power-014.old/src/dkp-polkit.c	2011-07-22 13:40:57.343655669 +0100
++++ DeviceKit-power-014/src/dkp-polkit.c	2011-07-22 13:41:12.211469796 +0100
+@@ -97,6 +97,42 @@ out:
+ }
+ 
+ /**
++ * dkp_polkit_is_allowed: 
++ **/
++gboolean
++dkp_polkit_is_allowed (DkpPolkit *polkit,
++		       PolkitSubject *subject,
++		       const gchar *action_id,
++		       GError **error)
++{
++	gboolean ret = FALSE;
++	GError *error_local = NULL;
++	PolkitAuthorizationResult *result;
++
++	/* check auth */
++	result = polkit_authority_check_authorization_sync (polkit->priv->authority,
++							    subject, action_id, NULL,
++							    POLKIT_CHECK_AUTHORIZATION_FLAGS_NONE,
++							    NULL, &error_local);
++	if (result == NULL) {
++		g_set_error (error,
++			     DKP_DAEMON_ERROR,
++			     DKP_DAEMON_ERROR_GENERAL,
++			     "failed to check authorisation: %s",
++			     error_local->message);
++		g_error_free (error_local);
++		goto out;
++	}
++
++	ret = polkit_authorization_result_get_is_authorized (result) ||
++	      polkit_authorization_result_get_is_challenge (result);
++out:
++	if (result != NULL)
++		g_object_unref (result);
++	return ret;
++}
++
++/**
+  * dkp_polkit_get_uid:
+  **/
+ gboolean
+diff -urNp DeviceKit-power-014.old/src/dkp-polkit.h DeviceKit-power-014/src/dkp-polkit.h
+--- DeviceKit-power-014.old/src/dkp-polkit.h	2011-07-22 13:40:57.339655718 +0100
++++ DeviceKit-power-014/src/dkp-polkit.h	2011-07-22 13:41:07.818524714 +0100
+@@ -57,6 +57,10 @@ gboolean	 dkp_polkit_check_auth		(DkpPol
+ 						 PolkitSubject		*subject,
+ 						 const gchar		*action_id,
+ 						 DBusGMethodInvocation	*context);
++gboolean	 dkp_polkit_is_allowed		(DkpPolkit		*polkit,
++						 PolkitSubject		*subject,
++						 const gchar		*action_id,
++						 GError		 	**error);
+ gboolean         dkp_polkit_get_uid             (DkpPolkit              *polkit,
+                                                  PolkitSubject          *subject,
+                                                  uid_t                  *uid);
+diff -urNp DeviceKit-power-014.old/src/org.freedesktop.DeviceKit.Power.xml DeviceKit-power-014/src/org.freedesktop.DeviceKit.Power.xml
+--- DeviceKit-power-014.old/src/org.freedesktop.DeviceKit.Power.xml	2011-07-22 13:40:57.259656718 +0100
++++ DeviceKit-power-014/src/org.freedesktop.DeviceKit.Power.xml	2011-07-22 13:41:07.815524752 +0100
+@@ -126,6 +126,23 @@ method return sender=:1.386 -> dest=:1.4
+ 
+     <!-- ************************************************************ -->
+ 
++    <method name="SuspendAllowed">
++      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
++      <arg name="allowed" direction="out" type="b">
++        <doc:doc><doc:summary>TRUE if allowed, otherwise FALSE</doc:summary></doc:doc>
++      </arg>
++      <doc:doc>
++        <doc:description>
++          <doc:para>
++            Check if the caller has (or can get) the PolicyKit privilege to call
++            <doc:ref type="method" to="Power.Suspend">Suspend</doc:ref>.
++          </doc:para>
++        </doc:description>
++      </doc:doc>
++    </method>
++
++    <!-- ************************************************************ -->
++
+     <method name="Hibernate">
+       <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+       <doc:doc>
+@@ -141,6 +158,23 @@ method return sender=:1.386 -> dest=:1.4
+ 
+     <!-- ************************************************************ -->
+ 
++    <method name="HibernateAllowed">
++      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
++      <arg name="allowed" direction="out" type="b">
++        <doc:doc><doc:summary>TRUE if allowed, otherwise FALSE</doc:summary></doc:doc>
++      </arg>
++      <doc:doc>
++        <doc:description>
++          <doc:para>
++            Check if the caller has (or can get) the PolicyKit privilege to call
++            <doc:ref type="method" to="Power.Hibernate">Hibernate</doc:ref>.
++          </doc:para>
++        </doc:description>
++      </doc:doc>
++    </method>
++
++    <!-- ************************************************************ -->
++
+     <property name="DaemonVersion" type="s" access="read">
+       <doc:doc><doc:description><doc:para>
+             Version of the running daemon, e.g. <doc:tt>002</doc:tt>.
