@@ -1,0 +1,34 @@
+
+------------------------------------------------------------------------
+- Current dependencies
+------------------------------------------------------------------------
+
+ - DeviceKit from git
+   - http://gitweb.freedesktop.org/?p=users/david/DeviceKit.git
+   - http://people.freedesktop.org/~david/DK/F9/src/DeviceKit-002-0.git20080506.fc9.src.rpm
+
+ - D-Bus GLib 0.74 with some patches
+   - necessary changes are already committed upstream
+   - See Fedora 9 / Rawhide package for the patches needed
+
+ - PolicyKit >= 0.8
+
+ - D-Bus >= 1.1.20
+
+------------------------------------------------------------------------
+- TODO List (TODO: this section is incomplete)
+------------------------------------------------------------------------
+
+Before (next) release:
+
+ - General project management tasks
+   - review licenses, NEWS, TODO, HACKING etc. file
+
+------------------------------------------------------------------------
+- Current features (TODO: this section is incomplete)
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+- Future features (TODO: this section is incomplete)
+------------------------------------------------------------------------
+

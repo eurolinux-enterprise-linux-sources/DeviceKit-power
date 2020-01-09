@@ -1,0 +1,136 @@
+<?xml version="1.0"?><!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="Power">
+  <refmeta>
+    <refentrytitle role="top_of_page">org.freedesktop.DeviceKit.Power</refentrytitle>
+  </refmeta>
+  <refnamediv>
+    <refname>org.freedesktop.DeviceKit.Power</refname>
+    <refpurpose>Power interface</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv role="synopsis">
+    <title role="synopsis.title">Methods</title>
+    <synopsis><link linkend="Power.EnumerateDevices">EnumerateDevices</link> (out 'ao' devices)
+<link linkend="Power.Suspend">Suspend</link>          ()
+<link linkend="Power.Hibernate">Hibernate</link>        ()
+</synopsis>
+  </refsynopsisdiv>
+  <refsect1 role="signal_proto">
+    <title role="signal_proto.title">Signals</title>
+    <synopsis><link linkend="Power::DeviceAdded">DeviceAdded</link>   ('o' device)
+<link linkend="Power::DeviceRemoved">DeviceRemoved</link> ('o' device)
+<link linkend="Power::DeviceChanged">DeviceChanged</link> ('o' device)
+<link linkend="Power::Changed">Changed</link>       ()
+</synopsis>
+  </refsect1>
+  <refsect1 role="impl_interfaces">
+    <title role="impl_interfaces.title">Implemented Interfaces</title>
+    <para>
+    Objects implementing org.freedesktop.DeviceKit.Power also implements
+    org.freedesktop.DBus.Introspectable,
+    org.freedesktop.DBus.Properties
+    </para>
+  </refsect1>
+  <refsect1 role="properties">
+    <title role="properties.title">Properties</title>
+    <synopsis><link linkend="Power:DaemonVersion">'DaemonVersion'</link> read      's'
+<link linkend="Power:CanSuspend">'CanSuspend'</link>    read      'b'
+<link linkend="Power:CanHibernate">'CanHibernate'</link>  read      'b'
+<link linkend="Power:OnBattery">'OnBattery'</link>     read      'b'
+<link linkend="Power:OnLowBattery">'OnLowBattery'</link>  read      'b'
+<link linkend="Power:LidIsClosed">'LidIsClosed'</link>   read      'b'
+<link linkend="Power:LidIsPresent">'LidIsPresent'</link>  read      'b'
+</synopsis>
+  </refsect1>
+  <refsect1 role="desc">
+    <title role="desc.title">Description</title>
+    <para>
+      
+        <para>
+          The DeviceKit-power service is available via the system message
+          bus. To access the service, use
+          the <literal>org.freedesktop.DeviceKit.Power</literal> interface on
+          the <literal>/org/freedesktop/DeviceKit/Power</literal> object on
+          the D-Bus system bus service with the well-known
+          name <literal>org.freedesktop.DeviceKit.Power</literal>.
+        </para>
+        <para>
+          <informalexample>
+            <programlisting>
+$ dbus-send --print-reply \
+            --system \
+            --dest=org.freedesktop.DeviceKit.Power \
+            /org/freedesktop/DeviceKit/Power \
+            org.freedesktop.DeviceKit.Power.EnumerateDevices
+
+method return sender=:1.386 -&gt; dest=:1.451 reply_serial=2
+   array [
+      object path "/org/freedesktop/DeviceKit/Power/devices/line_power_AC"
+      object path "/org/freedesktop/DeviceKit/Power/devices/battery_BAT0"
+   ]
+            </programlisting>
+          </informalexample>
+        </para>
+      
+    </para>
+  </refsect1>
+  <refsect1 role="details"><title role="details.title">Details</title><refsect2><title><anchor role="function" id="Power.EnumerateDevices"/>EnumerateDevices ()</title><indexterm><primary>EnumerateDevices</primary><secondary>Power</secondary></indexterm><programlisting>EnumerateDevices (out 'ao' devices)</programlisting></refsect2>
+          <para>
+            Enumerate all power objects on the system.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>devices</parameter>:</term><listitem><simpara>An array of object paths for devices.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="Power.Suspend"/>Suspend ()</title><indexterm><primary>Suspend</primary><secondary>Power</secondary></indexterm><programlisting>Suspend ()</programlisting></refsect2>
+          <para>
+            Suspends the computer into a low power state.
+            System state is not preserved if the power is lost.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Power.Hibernate"/>Hibernate ()</title><indexterm><primary>Hibernate</primary><secondary>Power</secondary></indexterm><programlisting>Hibernate ()</programlisting></refsect2>
+          <para>
+            Hibernates the computer into a low power state.
+            System state is preserved if the power is lost.
+          </para>
+        <variablelist role="params"/></refsect1>
+  <refsect1 role="signals"><title role="signals.title">Signal Details</title><refsect2><title><anchor role="function" id="Power::DeviceAdded"/>The DeviceAdded signal</title><indexterm><primary>DeviceAdded</primary><secondary>Power</secondary></indexterm><programlisting>DeviceAdded ('o' device)</programlisting></refsect2>
+          <para>
+            Emitted when a device is added.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>device</parameter>:</term><listitem><simpara>Object path of device that was added.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="Power::DeviceRemoved"/>The DeviceRemoved signal</title><indexterm><primary>DeviceRemoved</primary><secondary>Power</secondary></indexterm><programlisting>DeviceRemoved ('o' device)</programlisting></refsect2>
+          <para>
+            Emitted when a device is removed.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>device</parameter>:</term><listitem><simpara>Object path of device that was removed.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="Power::DeviceChanged"/>The DeviceChanged signal</title><indexterm><primary>DeviceChanged</primary><secondary>Power</secondary></indexterm><programlisting>DeviceChanged ('o' device)</programlisting></refsect2>
+          <para>
+            Emitted when a device changed.
+          </para>
+        <variablelist role="params"><varlistentry><term><parameter>device</parameter>:</term><listitem><simpara>Object path of device that was changed.</simpara></listitem></varlistentry></variablelist><refsect2><title><anchor role="function" id="Power::Changed"/>The Changed signal</title><indexterm><primary>Changed</primary><secondary>Power</secondary></indexterm><programlisting>Changed ()</programlisting></refsect2>
+          <para>
+            Emitted when one or more properties on the object changes.
+          </para>
+        <variablelist role="params"/></refsect1>
+  <refsect1 role="property_details"><title role="property_details.title">Property Details</title><refsect2><title><anchor role="function" id="Power:DaemonVersion"/>The "DaemonVersion" property</title><indexterm><primary>DaemonVersion</primary><secondary>Power</secondary></indexterm><programlisting>'DaemonVersion'  read      's'
+</programlisting></refsect2><para>
+            Version of the running daemon, e.g. <literal>002</literal>.
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:CanSuspend"/>The "CanSuspend" property</title><indexterm><primary>CanSuspend</primary><secondary>Power</secondary></indexterm><programlisting>'CanSuspend'  read      'b'
+</programlisting></refsect2><para>
+            Whether the system is able to suspend.
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:CanHibernate"/>The "CanHibernate" property</title><indexterm><primary>CanHibernate</primary><secondary>Power</secondary></indexterm><programlisting>'CanHibernate'  read      'b'
+</programlisting></refsect2><para>
+            Whether the system is able to hibernate.
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:OnBattery"/>The "OnBattery" property</title><indexterm><primary>OnBattery</primary><secondary>Power</secondary></indexterm><programlisting>'OnBattery'  read      'b'
+</programlisting></refsect2><para>
+            Indicates whether the system is running on battery power.
+            This property is provided for convenience.
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:OnLowBattery"/>The "OnLowBattery" property</title><indexterm><primary>OnLowBattery</primary><secondary>Power</secondary></indexterm><programlisting>'OnLowBattery'  read      'b'
+</programlisting></refsect2><para>
+            Indicates whether the system is running on battery power and if the battery is critically low.
+            This property is provided for convenience.
+      </para><variablelist role="params"/><refsect2><title><anchor role="function" id="Power:LidIsClosed"/>The "LidIsClosed" property</title><indexterm><primary>LidIsClosed</primary><secondary>Power</secondary></indexterm><programlisting>'LidIsClosed'  read      'b'
+</programlisting></refsect2>
+          <para>
+            Indicates if the laptop lid is closed where the display cannot be seen.
+          </para>
+        <variablelist role="params"/><refsect2><title><anchor role="function" id="Power:LidIsPresent"/>The "LidIsPresent" property</title><indexterm><primary>LidIsPresent</primary><secondary>Power</secondary></indexterm><programlisting>'LidIsPresent'  read      'b'
+</programlisting></refsect2>
+          <para>
+            If the system has a lid device.
+          </para>
+        <variablelist role="params"/></refsect1>
+</refentry>

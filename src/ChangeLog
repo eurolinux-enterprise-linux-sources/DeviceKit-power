@@ -1,0 +1,860 @@
+commit 4756da4b8157d3d6984b0a4482081100dd8115a4
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Wed Aug 6 06:58:45 2008 +0100
+
+    make some stuff non-global in upower
+
+ tools/up-tool.c |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
+
+commit b242cbd9a617b4cf1d62cb22e3680167683577fd
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 17:29:06 2008 +0100
+
+    trivial: remove some un-needed defines
+
+ tools/up-tool.c |   18 ------------------
+ 1 files changed, 0 insertions(+), 18 deletions(-)
+
+commit 5b6bae572f39a05e78f6c0c35018725f05c97a4d
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 17:26:35 2008 +0100
+
+    abstract out the client and client device parts of the upower
+    tool
+
+ tools/Makefile.am         |    4 +
+ tools/up-device.c |  384
+ +++++++++++++++++++++++++++++++++++++++++++++
+ tools/up-device.h |   72 +++++++++
+ tools/up-client.c        |  269 +++++++++++++++++++++++++++++++
+ tools/up-client.h        |   66 ++++++++
+ tools/up-tool.c          |  248 ++++-------------------------
+ 6 files changed, 829 insertions(+), 214 deletions(-)
+
+commit da8ec3f3b12f9869f2d7b0c93169d3c68e434ef2
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 15:39:05 2008 +0100
+
+    move the enumeration into it's own function ready for tidyup
+
+ tools/up-tool.c |   46 +++++++++++++++++++++++++++++++++++-----------
+ 1 files changed, 35 insertions(+), 11 deletions(-)
+
+commit 12c592ddeedc4bb0892234e449db8bd3e97c5d61
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 12:30:33 2008 +0100
+
+    make the LowBatteryChanged and OnBatteryChanged signals work
+
+ src/up-daemon.c |   88
+ ++++++++++++++++++++++++++++++++++++++++++++++++-----
+ src/up-source.c |   55 +++++++++++++++++++++------------
+ src/up-source.h |    7 ++--
+ 3 files changed, 118 insertions(+), 32 deletions(-)
+
+commit 16f2c597aa03d1405c04b14595690f9717a801c8
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 12:25:27 2008 +0100
+
+    don't segfault when a history file is present but empty
+
+ upower-gobject/up-history-data.c |    2 +-
+ src/up-history.c                 |   10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+commit 38f86d7dae9f190f6e33c1940452a880bf96e396
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 12:02:18 2008 +0100
+
+    add some GObject checks in a couple of modules to try to debug a
+    problem I'm seeing
+
+ src/up-device-list.c |   17 ++++-
+ src/up-device-list.h |   12 ++--
+ src/up-history.c     |  182
+ +++++++++++++++++++++++++++----------------------
+ src/up-history.h     |   24 +++---
+ 4 files changed, 133 insertions(+), 102 deletions(-)
+
+commit 22dfd9e7db9e58584e9f00359528c379f0a98cea
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 11:41:26 2008 +0100
+
+    don't get the ID in UpDevice, we already set it in UpSource
+
+ src/up-device.c |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+commit eed12da295df1209496ac029f07fbc376afdfb3f
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 10:44:57 2008 +0100
+
+    split out the device list abstraction as a proper GObject so we can
+    easily get the device list for the power queries
+
+ src/Makefile.am       |    1 +
+ src/up-daemon.c      |   88 ++++++++++---------------
+ src/up-device-list.c |  173
+ +++++++++++++++++++++++++++++++++++++++++++++++++
+ src/up-device-list.h |   68 +++++++++++++++++++
+ 4 files changed, 277 insertions(+), 53 deletions(-)
+
+commit 4e4859c9cba1dfb16a0299bf6328aa58cf001818
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Tue Aug 5 09:45:05 2008 +0100
+
+    add some helpers in UpSource to get the binary states of primary
+    batteries
+
+ src/up-daemon.c |    2 ++
+ src/up-source.c |   28 ++++++++++++++++++++++++++++
+ src/up-source.h |    4 ++++
+ 3 files changed, 34 insertions(+), 0 deletions(-)
+
+commit 9dca67f115ff8a71c1f633356918a9e056d24cac
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 17:31:52 2008 +0100
+
+    add a new ninary to get the battery power state
+
+ src/up-history.c         |    3 +-
+ tools/Makefile.am         |   19 +++++++++++--
+ tools/up-battery-power.c |   67
+ +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 84 insertions(+), 5 deletions(-)
+
+commit 53d3e2bf255fba4f73cab0120e487d16214242af
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 16:57:56 2008 +0100
+
+    treat the timespan like a range, and search backwards so we aways
+    get some data
+
+ src/up-history.c |   21 ++++++++++++++-------
+ 1 files changed, 14 insertions(+), 7 deletions(-)
+
+commit 50cadd86229fb5cbd681d259b9b6e5323b251337
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 16:51:30 2008 +0100
+
+    correct the signature of GetOnBattery and GetLowbattery
+
+ src/org.freedesktop.UPower.xml |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+commit 9f171a14ef6b27fe1a458ded143684dc6e988886
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 16:41:58 2008 +0100
+
+    make upower --dump work
+
+ tools/up-tool.c |   11 +++++++----
+ 1 files changed, 7 insertions(+), 4 deletions(-)
+
+commit 8c4efc79f33511eafa06074357fffc2c16e8e284
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 16:25:25 2008 +0100
+
+    use UpHistoryData in upower
+
+ upower-gobject/Makefile.am       |    2 +
+ upower-gobject/up-history-data.c |  173
+ +++++++++++++++++++++++++++++++++++++
+ upower-gobject/up-history-data.h |   51 +++++++++++
+ src/Makefile.am                   |    1 -
+ src/up-history-data.c             |  173
+ -------------------------------------
+ src/up-history-data.h             |   51 -----------
+ tools/up-tool.c                  |   29 ++++--
+ 7 files changed, 245 insertions(+), 235 deletions(-)
+
+commit 3e8ab9514a4524d33128295e65b32fc42411b523
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 16:12:49 2008 +0100
+
+    get the device stats in the helper tool
+
+ tools/up-tool.c |   82
+ +++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 files changed, 78 insertions(+), 4 deletions(-)
+
+commit fad9b70a7a00affec887d7cb2c94a73d079554ca
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 16:12:10 2008 +0100
+
+    don't crash if we do GetStatistics on a device without history
+
+ src/up-source.c |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit 0e617b862c8e427cfbcaaeb5f47b7f19979479b5
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 15:36:47 2008 +0100
+
+    Add a GetStatistics() method on org.freedesktop.UPower.Source
+    so we can print some funky graphs
+
+ src/up-source.c                               |   96
+ ++++++++++++++++++++++-
+ src/up-source.h                               |   20 +++++-
+ src/org.freedesktop.UPower.Source.xml |   23 ++++++
+ 3 files changed, 132 insertions(+), 7 deletions(-)
+
+commit dfd11030674b9e52ada85c62a3a0860d14c4ac95
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 14:52:33 2008 +0100
+
+    the power_supply class gives a very clear status enum, just use it
+
+ src/up-source.c |   36 +++++++++++++++---------------------
+ 1 files changed, 15 insertions(+), 21 deletions(-)
+
+commit a562159bc73920fd913a859bf5c822a31d14ef1e
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 14:48:02 2008 +0100
+
+    add simple history data to be saved and retrieved
+
+ src/Makefile.am   |    4 +
+ src/up-history.c |  495
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/up-history.h |   71 ++++++++
+ src/up-source.c  |   43 +++++-
+ 4 files changed, 612 insertions(+), 1 deletions(-)
+
+commit 1d7655c14fe6b622e6d01269e11c1c193e1a63ce
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 14:34:33 2008 +0100
+
+    add some helpers to manipulate UpHistoryData objects for the future
+    history and profiling code
+
+ src/up-history-data.c |  173
+ +++++++++++++++++++++++++++++++++++++++++++++++++
+ src/up-history-data.h |   51 ++++++++++++++
+ 2 files changed, 224 insertions(+), 0 deletions(-)
+
+commit 3f606443b59c0f2c5eac3573855080edf1a28468
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 14:30:34 2008 +0100
+
+    add a function up_object_diff() to pretty print the differences
+    between two UpObject's
+
+ upower-gobject/up-object.c |  162
+ ++++++++++++++++++++++++++++++++++++-----
+ upower-gobject/up-object.h |    2 +
+ 2 files changed, 144 insertions(+), 20 deletions(-)
+
+commit 66b6a807227036a256634cfc42f0ecc4ce51d83d
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 13:49:41 2008 +0100
+
+    print a better seconds/minutes/hours text -- needs localising properly
+
+ upower-gobject/up-object.c |   36 ++++++++++++++++++++++++++++++------
+ 1 files changed, 30 insertions(+), 6 deletions(-)
+
+commit b5b5b6824bece0dd9a49f9e219dcf743e0b22a81
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 12:20:26 2008 +0100
+
+    handle SIGINT so we can clean up after ourselves
+
+ src/main.c |   23 ++++++++++++++++++++++-
+ 1 files changed, 22 insertions(+), 1 deletions(-)
+
+commit f1558a27f56fc96e546369bff562e7e5307d614c
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 12:19:28 2008 +0100
+
+    remove some trivial whitespace and an invalid comment
+
+ src/org.freedesktop.UPower.Source.xml |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
+
+commit 0cd1a18a20a2de890704a69d813969442899adf7
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 11:54:15 2008 +0100
+
+    add the skeleton --dump option for debugging -- more to come
+
+ tools/up-tool.c |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+commit 117720b03de371e7d4194a8556c3eb413f7c43d1
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Mon Aug 4 11:53:20 2008 +0100
+
+    add a GIO dep so we can read and write files in the future
+
+ configure.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit ec79fc0229a0b6acf1849476ac063354a621c4bc
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 17:39:39 2008 +0100
+
+    only poll when we have no updates when charging or discharging. if
+    we are empty or full, there's no point
+
+ src/up-source.c |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
+commit b626fcd195908e07b3c9581183bc6c6d11479e2a
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 17:33:31 2008 +0100
+
+    add some trivial gitignore files
+
+ .gitignore          |   55
+ +++++++++++++++++++++++++++++++++++++++++++++++++++
+ doc/.gitignore      |   15 +++++++++++++
+ doc/dbus/.gitignore |    3 ++
+ po/.gitignore       |    4 +++
+ policy/.gitignore   |    2 +
+ src/.gitignore      |    9 ++++++++
+ tools/.gitignore    |    7 ++++++
+ 7 files changed, 95 insertions(+), 0 deletions(-)
+
+commit 74683e3fa712d7f4f2b2474cc4c045020ad2bafb
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 17:27:12 2008 +0100
+
+    of course, the right thing to do is make a static lib to avoid
+    playing with ../src/ type paths
+
+ Makefile.am                  |    2 +-
+ configure.in                 |    1 +
+ upower-gobject/.gitignore   |   11 ++
+ upower-gobject/Makefile.am  |   25 +++
+ upower-gobject/egg-debug.c  |  240 ++++++++++++++++++++++++++++
+ upower-gobject/egg-debug.h  |   80 +++++++++
+ upower-gobject/up-enum.c   |  229 ++++++++++++++++++++++++++
+ upower-gobject/up-enum.h   |   69 ++++++++
+ upower-gobject/up-object.c |  361
+ ++++++++++++++++++++++++++++++++++++++++++
+ upower-gobject/up-object.h |   67 ++++++++
+ src/Makefile.am              |    7 +-
+ src/egg-debug.c              |  240 ----------------------------
+ src/egg-debug.h              |   80 ---------
+ src/up-enum.c               |  229 --------------------------
+ src/up-enum.h               |   69 --------
+ src/up-object.c             |  361
+ ------------------------------------------
+ src/up-object.h             |   67 --------
+ tools/Makefile.am            |    7 +-
+ tools/up-tool.c             |    4 +-
+ 19 files changed, 1094 insertions(+), 1055 deletions(-)
+
+commit d06a9707c5e2ab366325e5e8e77207dcc1885c56
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 17:01:45 2008 +0100
+
+    trivial line fixes :-)
+
+ src/up-daemon.c |    7 -------
+ src/up-source.c |    2 --
+ 2 files changed, 0 insertions(+), 9 deletions(-)
+
+commit d9a0190fe2d3f277750ace2e71ae25aa0ead7cef
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 16:55:50 2008 +0100
+
+    don't print blank lines in up_object_print
+
+ src/up-object.c |   32 +++++++++++++++++++++++++++++---
+ src/up-source.c |    5 +++++
+ 2 files changed, 34 insertions(+), 3 deletions(-)
+
+commit dee758ac78df79e5378efddd493e6e870c75f3d6
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 16:48:33 2008 +0100
+
+    use UpObject in upower command line tool
+
+ tools/up-tool.c |  209
+ ++++++++++++------------------------------------------
+ 1 files changed, 46 insertions(+), 163 deletions(-)
+
+commit 1113df1f43627efa9929045dc68eba853e74129e
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 16:37:11 2008 +0100
+
+    abstract out the meta-device into a seporate struct so we can copy
+    it, check for changes and print it
+
+ src/Makefile.am   |    1 +
+ src/up-object.c  |  335
+ +++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/up-object.h  |   67 +++++++++++
+ src/up-source.c  |  344
+ +++++++++++++++++++++--------------------------------
+ tools/Makefile.am |    2 +
+ 5 files changed, 542 insertions(+), 207 deletions(-)
+
+commit 8d4f1385370f65485968d0a2bbc892a3bd571e63
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 16:36:12 2008 +0100
+
+    remove energy-empty-design from upower tool
+
+ tools/up-tool.c |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
+
+commit 9cc2a944cb50c29cf0dc1b95f436a1e88cda38dd
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 16:35:22 2008 +0100
+
+    add the abilty to turn the text enum forms back into enumerated types
+
+ src/up-enum.c |   77
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ src/up-enum.h |    9 ++++--
+ 2 files changed, 78 insertions(+), 8 deletions(-)
+
+commit 9db5f0d3dcb665c7fad558da547c9648ef6ba647
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 13:22:52 2008 +0100
+
+    fix the type and state enums when getting unknown
+
+ src/up-enum.c |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+commit 27cde0b6e03adc2db73413e4b4df09e00e86c337
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 13:15:40 2008 +0100
+
+    rework upower tool, more work to come
+
+ po/POTFILES.in       |    3 +
+ tools/Makefile.am    |   19 ++--
+ tools/upower.c |  376
+ --------------------------------------------------
+ tools/up-tool.c     |  371
+ +++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 384 insertions(+), 385 deletions(-)
+
+commit 81a4c5d82443b38f6618b2d5200005e0d9f93751
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 12:26:18 2008 +0100
+
+    add some debugging infrastructure
+
+ src/Makefile.am   |    1 +
+ src/up-daemon.c  |   49 ++++++------
+ src/egg-debug.c   |  240
+ +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/egg-debug.h   |   80 ++++++++++++++++++
+ src/up-device.c  |   12 ++-
+ src/up-enum.c    |    7 +-
+ src/up-source.c  |   23 +++---
+ src/main.c        |   44 +++++-----
+ src/sysfs-utils.c |   10 +-
+ 9 files changed, 396 insertions(+), 70 deletions(-)
+
+commit 4f934ad2dfa319c9bdfe0706442833df95cc1129
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 12:07:56 2008 +0100
+
+    convert spaces to tabs, and make sure functions have sensible names
+
+ src/up-daemon.c  | 1095 +++++++++++++++++++++++++-----------------------
+ src/up-daemon.h  |   63 ++--
+ src/up-device.c  |   49 ++-
+ src/up-device.h  |   43 +-
+ src/up-enum.c    |  164 ++++----
+ src/up-enum.h    |   50 ++--
+ src/up-source.c  | 1213
+ +++++++++++++++++++++++++++--------------------------
+ src/up-source.h  |   29 +-
+ src/main.c        |  176 ++++----
+ src/sysfs-utils.c |  244 ++++++------
+ 10 files changed, 1624 insertions(+), 1502 deletions(-)
+
+commit cbaa6851d4e5c69a9b797c9379446388a989b4b0
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 11:24:54 2008 +0100
+
+    change the GObject prefix from DevkitPower to Up
+
+ src/Makefile.am  |    8 ++--
+ src/up-daemon.c |  152
+ +++++++++++++++++++++++++++---------------------------
+ src/up-daemon.h |   62 +++++++++++-----------
+ src/up-device.c |   32 ++++++------
+ src/up-device.h |   38 +++++++-------
+ src/up-enum.c   |   60 +++++++++++-----------
+ src/up-enum.h   |   60 +++++++++++-----------
+ src/up-source.c |  138 ++++++++++++++++++++++++------------------------
+ src/up-source.h |   38 +++++++-------
+ src/main.c       |    4 +-
+ 10 files changed, 296 insertions(+), 296 deletions(-)
+
+commit 3bb6d08e29796414e77a82136b02ed82b9e4ba1b
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 11:10:50 2008 +0100
+
+    rename some source files
+
+ src/Makefile.am  |   53
+ +++++++++++++++++++++++++++--------------------------
+ src/up-daemon.c |    8 ++++----
+ src/up-device.c |    4 ++--
+ src/up-device.h |    2 +-
+ src/up-enum.c   |    3 ++-
+ src/up-source.c |    8 ++++----
+ src/up-source.h |    4 ++--
+ src/main.c       |    2 +-
+ 8 files changed, 43 insertions(+), 41 deletions(-)
+
+commit 7e4c0100bad63a75adde77ed01036e52e00c41d2
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Aug 1 11:10:04 2008 +0100
+
+    add some more GCC warnings
+
+ configure.in                  |    9 +
+ src/upower-daemon.c     |  755
+ -------------------------------------
+ src/upower-daemon.h     |   92 -----
+ src/upower-device.c     |   92 -----
+ src/upower-device.h     |   68 ----
+ src/upower-enum.c       |  142 -------
+ src/upower-enum.h       |   66 ----
+ src/upower-marshal.list |    2 -
+ src/upower-source.c     |  838
+ -----------------------------------------
+ src/upower-source.h     |   65 ----
+ src/up-daemon.c              |  755
+ +++++++++++++++++++++++++++++++++++++
+ src/up-daemon.h              |   92 +++++
+ src/up-device.c              |   92 +++++
+ src/up-device.h              |   68 ++++
+ src/up-enum.c                |  142 +++++++
+ src/up-enum.h                |   66 ++++
+ src/up-marshal.list          |    2 +
+ src/up-source.c              |  838
+ +++++++++++++++++++++++++++++++++++++++++
+ src/up-source.h              |   65 ++++
+ 19 files changed, 2129 insertions(+), 2120 deletions(-)
+
+commit 1023e581335f5a078319b86794c24dd92f9b69f2
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 20:14:42 2008 +0100
+
+    when we haven't got a rate value, try to calculate this
+
+ src/upower-source.c |   75
+ ++++++++++++++++++++++++++++++++++++--------
+ 1 files changed, 61 insertions(+), 14 deletions(-)
+
+commit 0e4418ca3035a9aee7efc2237858ddce4832a6b2
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 19:04:23 2008 +0100
+
+    don't return an ID if we are not present
+
+ src/upower-source.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit d85c4956741a3c02a7ae03cd2b429f0035080992
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 17:40:07 2008 +0100
+
+    add some more logic into the power supply class
+
+ src/upower-source.c |   23 ++++++++++++++++-------
+ 1 files changed, 16 insertions(+), 7 deletions(-)
+
+commit fccd159c739a71e8863c96ee6b9037ba8f3ae83e
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 17:30:58 2008 +0100
+
+    calculate a quick and dirty time remaining value
+
+ src/upower-source.c |   30 ++++++++++++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+
+commit d7447437dd1d2bc722a2bc746d9af2fb8b9a1a28
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 17:17:22 2008 +0100
+
+    only suppy an id for devices supplying the system
+
+ src/upower-source.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+commit 4a15e42c41415a8c9cc59e23c51092e097dfe7d4
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 17:14:14 2008 +0100
+
+    add a power-supply bool property so we can tell if the device is a
+    supplier or consumer
+
+ src/upower-source.c                      |   14 ++++++++++++++
+ src/org.freedesktop.UPower.Source.xml |    8 ++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
+
+commit 36bf97d9133f4bfd1f134da6c3052785701be65d
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 17:04:05 2008 +0100
+
+    provide a function for getting a unique ID for the battery
+
+ src/upower-source.c |   42
+ ++++++++++++++++++++++++++++++++++++++++++
+ src/upower-source.h |    1 +
+ 2 files changed, 43 insertions(+), 0 deletions(-)
+
+commit 2ed6ed80190a746f30c8b3fa08d3462b02669c5a
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Fri Jul 25 16:55:28 2008 +0100
+
+    add a couple of sanity checks for the battery values
+
+ src/upower-source.c |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+commit 32df1e0cc1ae92503902a1e329ed56952a942841
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:30:00 2008 +0100
+
+    add two bits of data that session applications really want --
+    battery mode and low battery mode
+
+ src/upower-daemon.c               |   46 ++++++++++++++++++++++
+ src/upower-daemon.h               |    4 ++
+ src/org.freedesktop.UPower.xml |   63
+ +++++++++++++++++++++++++++++++
+ 3 files changed, 113 insertions(+), 0 deletions(-)
+
+commit 2bb27aaf1a6f754a042d67463328eb988cba88f3
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:27:45 2008 +0100
+
+    add the Suspend() and Hibernate() stub methods
+
+ src/upower-daemon.c               |   78
+ +++++++++++++++++++++++++++++++
+ src/upower-daemon.h               |    4 ++
+ src/org.freedesktop.UPower.xml |   28 +++++++++++
+ 3 files changed, 110 insertions(+), 0 deletions(-)
+
+commit 9ce7f3665be06b34e6a4cb9199050b98c731b0fc
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:19:16 2008 +0100
+
+    if the battery goes away, properly clean up the cached values
+
+ src/upower-source.c |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+commit a6f9b0fcb6043b0ad778f88e660694fbadefd81b
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:18:12 2008 +0100
+
+    using the technology as the coldplug indicator is a bad idea,
+    properly flag this
+
+ src/upower-source.c |   86
+ ++++++++++++++++++++++++++++++++------------
+ 1 files changed, 62 insertions(+), 24 deletions(-)
+
+commit 1f41f03776976073f56aaeb85e6635df43dd8d6c
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:15:40 2008 +0100
+
+    export battery-is-present as some batteries in laptops and UPSs can
+    be removed
+
+ src/upower-source.c                      |   13 +++++++++++++
+ src/org.freedesktop.UPower.Source.xml |   12 ++++++++++++
+ 2 files changed, 25 insertions(+), 0 deletions(-)
+
+commit a1f9c0528097593c62822329ba1e66bf3a3f8d16
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:12:47 2008 +0100
+
+    export battery-is-rechargeable so we can export if we think it can
+    be recharged
+
+ src/upower-source.c                      |   12 ++++++++++++
+ src/org.freedesktop.UPower.Source.xml |   10 ++++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
+
+commit 4433bd3379bd4aa675ad2542bd64bbef2c5dc253
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:09:17 2008 +0100
+
+    export battery-capacity as it's a useful property of a battery
+
+ src/upower-source.c                      |    9 +++++++++
+ src/org.freedesktop.UPower.Source.xml |   17 +++++++++++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
+
+commit ec658f5d29fef7ba592450703766b9f374dbe79f
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 18:03:05 2008 +0100
+
+    battery-technology should be an enumerated type
+
+ src/upower-enum.c                        |   62
+ ++++++++++++++++++++++++
+ src/upower-enum.h                        |   12 +++++
+ src/upower-source.c                      |   10 ++--
+ src/org.freedesktop.UPower.Source.xml |    3 +-
+ 4 files changed, 80 insertions(+), 7 deletions(-)
+
+commit 2da987f9bca5479e352ac98bc73d5ebfe2c0e43d
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 17:59:48 2008 +0100
+
+    add the battery state enumerated type property
+
+ src/upower-enum.c                        |   24
+ ++++++++++++++++++++++++
+ src/upower-enum.h                        |    9 +++++++++
+ src/upower-source.c                      |   23
+ ++++++++++++++++++++++-
+ src/org.freedesktop.UPower.Source.xml |   12 ++++++++++++
+ 4 files changed, 67 insertions(+), 1 deletions(-)
+
+commit f1c5630274195d4c613b95a49200ac48c3130f11
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 17:52:51 2008 +0100
+
+    split out the enumerated stuff into upower-enum.[c|h] as
+    they'll be more soon
+
+ src/Makefile.am           |    1 +
+ src/upower-enum.c   |   56
+ +++++++++++++++++++++++++++++++++++++++++++++
+ src/upower-enum.h   |   45 ++++++++++++++++++++++++++++++++++++
+ src/upower-source.c |   24 ++++++++-----------
+ 4 files changed, 112 insertions(+), 14 deletions(-)
+
+commit 8a04a2c3eda34f049a0d2190070c9c9e19ee46ec
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 17:46:31 2008 +0100
+
+    remove the battery-energy-empty-design parameter, it's never going
+    to be anything other than zero
+
+ src/upower-source.c                      |    9 ---------
+ src/org.freedesktop.UPower.Source.xml |   11 -----------
+ 2 files changed, 0 insertions(+), 20 deletions(-)
+
+commit 4398839de1ecf4e88f425703c182444540a488c2
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 17:41:14 2008 +0100
+
+    add the PolicyKit action org.freedesktop.upower.hibernate
+
+ policy/org.freedesktop.upower.policy.in |   14 ++++++++++++--
+ 1 files changed, 12 insertions(+), 2 deletions(-)
+
+commit 058834be91645d445c1c785e3339fc383efba301
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 17:40:22 2008 +0100
+
+    add a new convenience function, sysfs_get_bool()
+
+ src/sysfs-utils.c |   18 ++++++++++++++++++
+ src/sysfs-utils.h |    1 +
+ 2 files changed, 19 insertions(+), 0 deletions(-)
+
+commit 75ecbba1947d21f8de076343372ca9729316b86f
+Author: Richard Hughes <richard@hughsie.com>
+Date:   Thu Jul 24 17:39:00 2008 +0100
+
+    fixup a few places where we mention a disk daemon to a power daemon
+
+ HACKING                                        |    4 ++--
+ src/org.freedesktop.UPower.Source.xml |    2 +-
+ src/org.freedesktop.UPower.xml        |    2 +-
+ tools/upower.c                           |    2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+commit 2a09a8062afc2a5947cb9ef5b0b1c2a57d1efdbb
+Author: David Zeuthen <davidz@redhat.com>
+Date:   Thu May 8 22:39:07 2008 -0400
+
+    commit test
+
+ README |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+commit af9c6f0b0311c65f79b6f930a144b9882118060b
+Author: David Zeuthen <davidz@redhat.com>
+Date:   Thu May 8 22:32:17 2008 -0400
+
+    forgot to add files
+
+ src/org.freedesktop.UPower.conf.in    |   11 +++++++++++
+ src/org.freedesktop.UPower.service.in |    5 +++++
+ 2 files changed, 16 insertions(+), 0 deletions(-)
+
+commit 44d53913068e11cd3da871f4dc5285f6149b5b4f
+Author: David Zeuthen <davidz@redhat.com>
+Date:   Thu May 8 22:30:53 2008 -0400
+
+    added wrong file
+
+ doc/version.xml    |    1 -
+ doc/version.xml.in |    1 +
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+
+commit 37f9df9b0568f9834452c949336783bf34e02ab9
+Author: David Zeuthen <davidz@redhat.com>
+Date:   Thu May 8 22:29:38 2008 -0400
+
+    initial commit
+
+ AUTHORS                                          |    1 +
+ COPYING                                          |  353 ++++++++++++
+ HACKING                                          |   93 ++++
+ Makefile.am                                      |   39 ++
+ NEWS                                             |    2 +
+ README                                           |    2 +
+ acinclude.m4                                     |   51 ++
+ autogen.sh                                       |   95 ++++
+ configure.in                                     |  165 ++++++
+ doc/Makefile.am                                  |   81 +++
+ doc/TODO                                         |   34 ++
+ doc/dbus/Makefile.am                             |   15 +
+ doc/dbus/dbus-introspect-docs.dtd                |   32 ++
+ doc/dbus/spec-to-docbook.xsl                     |  543
+ +++++++++++++++++++
+ doc/upower-docs.xml                        |   94 ++++
+ doc/man/UPower.xml                      |   64 +++
+ doc/man/Makefile.am                              |   24 +
+ doc/man/upower-daemon.xml                  |   84 +++
+ doc/man/upower.xml                         |   99 ++++
+ doc/version.xml                                  |    1 +
+ gtk-doc.make                                     |  159 ++++++
+ mkinstalldirs                                    |  111 ++++
+ po/LINGUAS                                       |    4 +
+ po/POTFILES.in                                   |    4 +
+ policy/Makefile.am                               |   17 +
+ policy/org.freedesktop.upower.policy.in |   32 ++
+ src/Makefile.am                                  |   82 +++
+ src/upower-daemon.c                        |  631
+ ++++++++++++++++++++++
+ src/upower-daemon.h                        |   84 +++
+ src/upower-device.c                        |   92 ++++
+ src/upower-device.h                        |   68 +++
+ src/upower-marshal.list                    |    2 +
+ src/upower-source.c                        |  593
+ ++++++++++++++++++++
+ src/upower-source.h                        |   64 +++
+ src/main.c                                       |  157 ++++++
+ src/org.freedesktop.UPower.Source.xml   |  228 ++++++++
+ src/org.freedesktop.UPower.xml          |   77 +++
+ src/sysfs-utils.c                                |  203 +++++++
+ src/sysfs-utils.h                                |   36 ++
+ tools/Makefile.am                                |   49 ++
+ tools/upower.c                             |  376 +++++++++++++
+ 41 files changed, 4941 insertions(+), 0 deletions(-)

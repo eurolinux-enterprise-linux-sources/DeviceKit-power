@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="DeviceKit-power Reference Manual" link="index.html" author="David Zeuthen" name="devkit-power" version="2" language="c">
+  <chapters>
+    <sub name="D-Bus API Reference" link="ref-dbus.html">
+      <sub name="org.freedesktop.DeviceKit.Power" link="Power.html"/>
+      <sub name="org.freedesktop.DeviceKit.Power.Device" link="Device.html"/>
+      <sub name="org.freedesktop.DeviceKit.Power.QoS" link="QoS.html"/>
+    </sub>
+    <sub name="Manual Pages" link="tools-fileformats.html">
+      <sub name="DeviceKit-power" link="DeviceKit-power.7.html"/>
+      <sub name="devkit-power-daemon" link="devkit-power-daemon.8.html"/>
+      <sub name="devkit-power" link="devkit-power.1.html"/>
+    </sub>
+    <sub name="Index" link="ix01.html"/>
+    <sub name="License" link="license.html"/>
+  </chapters>
+  <functions>
+    <keyword type="" name="EnumerateDevices ()" link="Power.html#Power.EnumerateDevices"/>
+    <keyword type="" name="Suspend ()" link="Power.html#Power.Suspend"/>
+    <keyword type="" name="Hibernate ()" link="Power.html#Power.Hibernate"/>
+    <keyword type="" name="The DeviceAdded signal" link="Power.html#Power::DeviceAdded"/>
+    <keyword type="" name="The DeviceRemoved signal" link="Power.html#Power::DeviceRemoved"/>
+    <keyword type="" name="The DeviceChanged signal" link="Power.html#Power::DeviceChanged"/>
+    <keyword type="" name="The Changed signal" link="Power.html#Power::Changed"/>
+    <keyword type="" name="The &quot;DaemonVersion&quot; property" link="Power.html#Power:DaemonVersion"/>
+    <keyword type="" name="The &quot;CanSuspend&quot; property" link="Power.html#Power:CanSuspend"/>
+    <keyword type="" name="The &quot;CanHibernate&quot; property" link="Power.html#Power:CanHibernate"/>
+    <keyword type="" name="The &quot;OnBattery&quot; property" link="Power.html#Power:OnBattery"/>
+    <keyword type="" name="The &quot;OnLowBattery&quot; property" link="Power.html#Power:OnLowBattery"/>
+    <keyword type="" name="The &quot;LidIsClosed&quot; property" link="Power.html#Power:LidIsClosed"/>
+    <keyword type="" name="The &quot;LidIsPresent&quot; property" link="Power.html#Power:LidIsPresent"/>
+    <keyword type="" name="Refresh ()" link="Device.html#Device.Refresh"/>
+    <keyword type="" name="GetHistory ()" link="Device.html#Device.GetHistory"/>
+    <keyword type="" name="GetStatistics ()" link="Device.html#Device.GetStatistics"/>
+    <keyword type="" name="The Changed signal" link="Device.html#Device::Changed"/>
+    <keyword type="" name="The &quot;NativePath&quot; property" link="Device.html#Device:NativePath"/>
+    <keyword type="" name="The &quot;Vendor&quot; property" link="Device.html#Device:Vendor"/>
+    <keyword type="" name="The &quot;Model&quot; property" link="Device.html#Device:Model"/>
+    <keyword type="" name="The &quot;Serial&quot; property" link="Device.html#Device:Serial"/>
+    <keyword type="" name="The &quot;UpdateTime&quot; property" link="Device.html#Device:UpdateTime"/>
+    <keyword type="" name="The &quot;Type&quot; property" link="Device.html#Device:Type"/>
+    <keyword type="" name="The &quot;PowerSupply&quot; property" link="Device.html#Device:PowerSupply"/>
+    <keyword type="" name="The &quot;HasHistory&quot; property" link="Device.html#Device:HasHistory"/>
+    <keyword type="" name="The &quot;HasStatistics&quot; property" link="Device.html#Device:HasStatistics"/>
+    <keyword type="" name="The &quot;Online&quot; property" link="Device.html#Device:Online"/>
+    <keyword type="" name="The &quot;Energy&quot; property" link="Device.html#Device:Energy"/>
+    <keyword type="" name="The &quot;EnergyEmpty&quot; property" link="Device.html#Device:EnergyEmpty"/>
+    <keyword type="" name="The &quot;EnergyFull&quot; property" link="Device.html#Device:EnergyFull"/>
+    <keyword type="" name="The &quot;EnergyFullDesign&quot; property" link="Device.html#Device:EnergyFullDesign"/>
+    <keyword type="" name="The &quot;EnergyRate&quot; property" link="Device.html#Device:EnergyRate"/>
+    <keyword type="" name="The &quot;Voltage&quot; property" link="Device.html#Device:Voltage"/>
+    <keyword type="" name="The &quot;TimeToEmpty&quot; property" link="Device.html#Device:TimeToEmpty"/>
+    <keyword type="" name="The &quot;TimeToFull&quot; property" link="Device.html#Device:TimeToFull"/>
+    <keyword type="" name="The &quot;Percentage&quot; property" link="Device.html#Device:Percentage"/>
+    <keyword type="" name="The &quot;IsPresent&quot; property" link="Device.html#Device:IsPresent"/>
+    <keyword type="" name="The &quot;State&quot; property" link="Device.html#Device:State"/>
+    <keyword type="" name="The &quot;IsRechargeable&quot; property" link="Device.html#Device:IsRechargeable"/>
+    <keyword type="" name="The &quot;Capacity&quot; property" link="Device.html#Device:Capacity"/>
+    <keyword type="" name="The &quot;Technology&quot; property" link="Device.html#Device:Technology"/>
+    <keyword type="" name="The &quot;RecallNotice&quot; property" link="Device.html#Device:RecallNotice"/>
+    <keyword type="" name="The &quot;RecallVendor&quot; property" link="Device.html#Device:RecallVendor"/>
+    <keyword type="" name="The &quot;RecallUrl&quot; property" link="Device.html#Device:RecallUrl"/>
+    <keyword type="" name="SetMinimumLatency ()" link="QoS.html#QoS.SetMinimumLatency"/>
+    <keyword type="" name="RequestLatency ()" link="QoS.html#QoS.RequestLatency"/>
+    <keyword type="" name="CancelRequest ()" link="QoS.html#QoS.CancelRequest"/>
+    <keyword type="" name="GetLatency ()" link="QoS.html#QoS.GetLatency"/>
+    <keyword type="" name="GetLatencyRequests ()" link="QoS.html#QoS.GetLatencyRequests"/>
+    <keyword type="" name="The LatencyChanged signal" link="QoS.html#QoS::LatencyChanged"/>
+    <keyword type="" name="The RequestsChanged signal" link="QoS.html#QoS::RequestsChanged"/>
+  </functions>
+</book>
